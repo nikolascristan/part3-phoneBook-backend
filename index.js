@@ -1,6 +1,7 @@
-const http = require('http')
+const express = require('express')
+const app = express()
 
-let notes = [
+let persons = [
     { 
       "id": "1",
       "name": "Arto Hellas", 
@@ -22,9 +23,22 @@ let notes = [
       "number": "39-23-6423122"
     }
 ]
-const app = http.createServer((request, response) => {
-    response.writeHead(200, { 'Content-Type': 'application/json' })
-    response.end(JSON.stringify(notes))
+
+app.get('/api/persons', (request, response) => {
+  response.send(persons)
+})
+
+app.get('/info', (request, response) => {
+  const peopleCount = persons.length
+  console.log(peopleCount)
+  const currentDate = new Date()
+  console.log(currentDate)
+
+  const pageInfo =`
+  <p>Phonebook has info for ${peopleCount}</p>
+  <p>${currentDate}</p>
+  `
+  response.send(pageInfo)
 })
 
 const PORT = 3001
