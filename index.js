@@ -1,7 +1,10 @@
 const express = require('express')
+const morgan = require('morgan')
 const app = express()
 
 app.use(express.json())
+app.use(morgan('tiny'))
+
 
 function areTheseObjectsEqual(first, second) {
   "use strict";
@@ -80,7 +83,7 @@ app.get('/info', (request, response) => {
   const peopleCount = persons.length
   console.log(peopleCount)
   const currentDate = new Date()
-  console.log(currentDate)
+  console.log(`testing ${currentDate}`)
 
   const pageInfo =`
   <p>Phonebook has info for ${peopleCount}</p>
