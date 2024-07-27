@@ -8,4 +8,14 @@ GET http://localhost:3001/info
 GET http://localhost:3001/api/persons/10
 
 ###
-DELETE http://localhost:3001/api/persons/4
+DELETE http://localhost:3001/api/persons/930566
+
+###
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "id": "",
+    "name": "BOB Poppen", 
+    "number": "39-23-1331213"
+}
