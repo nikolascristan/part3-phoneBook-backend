@@ -3,6 +3,52 @@ const app = express()
 
 app.use(express.json())
 
+function areTheseObjectsEqual(first, second) {
+  "use strict";
+
+  if (
+    first === null ||
+    first === undefined ||
+    second === null ||
+    second === undefined
+  ) {
+    return first === second;
+  }
+
+  if (first.constructor !== second.constructor) {
+    return false;
+  }
+
+  if (first instanceof Function || first instanceof RegExp) {
+    return first === second;
+  }
+
+  if (first === second || first.valueOf() === second.valueOf()) {
+    return true;
+  }
+
+  if (first instanceof Date) return false;
+
+  if (Array.isArray(first) && first.length !== second.length) {
+    return false;
+  }
+
+  if (!(first instanceof Object) || !(second instanceof Object)) {
+    return false;
+  }
+
+  const firstKeys = Object.keys(first);
+  const allKeysExist = Object.keys(second).every(
+    (i) => firstKeys.indexOf(i) !== -1
+  );
+
+  const allKeyValuesMatch = firstKeys.every((i) =>
+    areTheseObjectsEqual(first[i], second[i])
+  );
+
+  return allKeysExist && allKeyValuesMatch;
+}
+
 let persons = [
     { 
       "id": "1",
@@ -64,13 +110,22 @@ app.post('/api/persons', (request, response) => {
   const newID = persons.length > 0 
   ? Math.floor(Math.random() * 1000000)
   :5
-
   const person = request.body
-  console.log(person)
   person.id = String(newID)
-  console.log(person)
-  persons = persons.concat(person)
-  response.json(person)
+  if (!person.name || !person.number) {
+    return response.status(400).json({
+      error: 'Name or Number missing'
+    })
+  }
+  const nameExists = persons.some(element => areTheseObjectsEqual(element.name, person.name))
+  const numberExists = persons.some(element => areTheseObjectsEqual(element.number, person.number))
+    if(!nameExists && !numberExists) {
+      persons = persons.concat(person)
+      response.status(201).json(person)
+    } else { response.status(400).json({
+      error: 'Name or Number already exist'
+    })
+    }
 })
 
 const PORT = 3001
