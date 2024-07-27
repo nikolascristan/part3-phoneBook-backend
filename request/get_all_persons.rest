@@ -19,3 +19,28 @@ Content-Type: application/json
     "name": "Mary Popk", 
     "number": "39-212123"
 }
+
+
+//Testing with render
+###
+GET https://part3-phonebook-backend-bh2t.onrender.com/api/persons
+
+###
+
+GET https://part3-phonebook-backend-bh2t.onrender.com/info
+
+###
+GET https://part3-phonebook-backend-bh2t.onrender.com/api/persons/10
+
+###
+DELETE https://part3-phonebook-backend-bh2t.onrender.com/api/persons/411208
+
+###
+POST https://part3-phonebook-backend-bh2t.onrender.com/api/persons
+Content-Type: application/json
+
+{
+    "id": "",
+    "name": "Mary Popk", 
+    "number": "39-212123"
+}
