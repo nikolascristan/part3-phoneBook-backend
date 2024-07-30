@@ -25,6 +25,7 @@ if (process.argv[2].length<3) {
     console.log('please give password')
     process.exit(1)
 }   
+
 mongoose.set('strictQuery',false)
 mongoose.connect(url)
 if (process.argv[3] && process.argv[4]) {
