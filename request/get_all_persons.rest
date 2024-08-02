@@ -5,7 +5,7 @@ GET http://localhost:3001/api/persons
 GET http://localhost:3001/info
 
 ###
-GET http://localhost:3001/api/persons/10
+GET http://localhost:3001/api/persons/66ad1a6c0f92d1e30bcb68b8
 
 ###
 DELETE http://localhost:3001/api/persons/523995
@@ -15,9 +15,8 @@ POST http://localhost:3001/api/persons
 Content-Type: application/json
 
 {
-    "id": "",
-    "name": "Mary Popk", 
-    "number": "39-212123"
+   "name": "July Tdsasd", 
+    "number": "56312443"
 }
 
 
@@ -40,7 +39,6 @@ POST https://part3-phonebook-backend-bh2t.onrender.com/api/persons
 Content-Type: application/json
 
 {
-    "id": "",
-    "name": "Mary Popk", 
-    "number": "39-212123"
+    "name": "July Thirty", 
+    "number": "657890132"
 }

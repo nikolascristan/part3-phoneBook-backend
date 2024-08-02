@@ -1,9 +1,10 @@
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
+require('dotenv').config()
 //const static = require('static')
 const app = express()
-
+const Person = require('./models/person')
 app.use(express.json())
 app.use(morgan('tiny'))
 app.use(cors())
@@ -55,6 +56,7 @@ function areTheseObjectsEqual(first, second) {
   return allKeysExist && allKeyValuesMatch;
 }
 
+
 let persons = [
     { 
       "id": "1",
@@ -78,11 +80,22 @@ let persons = [
     }
 ]
 
-app.get('/api/persons', (request, response) => {
+//local
+/*app.get('/api/persons', (request, response) => {
   response.send(persons)
+})*/
+
+
+//Working on fetch all
+app.get('/api/persons', (request, response) => {
+  Person.find({}).then(persons => {
+    response.json(persons)
+  })
 })
 
-app.get('/info', (request, response) => {
+
+//Local info route
+/*app.get('/info', (request, response) => {
   const peopleCount = persons.length
   console.log(peopleCount)
   const currentDate = new Date()
@@ -93,9 +106,11 @@ app.get('/info', (request, response) => {
   <p>${currentDate}</p>
   `
   response.send(pageInfo)
-})
+})*/
 
-app.get('/api/persons/:id', (request, response) => {
+
+//Local find by id route
+/*app.get('/api/persons/:id', (request, response) => {
   const id = request.params.id
   const person = persons.find(persons => persons.id === id)
   if (person) {
@@ -103,16 +118,27 @@ app.get('/api/persons/:id', (request, response) => {
   } else {
     response.status(404).end()
   }
-})
+})*/
 
-app.delete('/api/persons/:id', (request, response) => {
+//Working on fetch by id from DB
+/*
+app.get('/api/persons/:id', (request, response) => {
+  person.findById(request.params.id).then(person => {
+    response.json(person)
+  })
+})*/
+
+
+//Local delete route
+/*app.delete('/api/persons/:id', (request, response) => {
   const id = request.params.id
   persons = persons.filter(persons => persons.id !== id)
 
   response.status(204).end()
-})
+})*/
 
-app.post('/api/persons', (request, response) => {
+//Local post route
+/*app.post('/api/persons', (request, response) => {
   const newID = persons.length > 0 
   ? Math.floor(Math.random() * 1000000)
   :5
@@ -132,9 +158,27 @@ app.post('/api/persons', (request, response) => {
       error: 'Name or Number already exist'
     })
     }
+})*/
+
+app.post('/api/persons', (request, response) => {
+  const body = request.body
+
+  if (!body.name && !body.number) {
+    return response.status(400).json({ error: 'name or number missing'})
+  }
+
+  const person = new Person({
+    name: `${body.name}`,
+    number: `${body.number}`
 })
 
-const PORT = process.env.PORT || 3001
+person.save().then(savedPerson => {
+  response.json(savedPerson)
+})
+
+})
+
+const PORT = process.env.PORT
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
