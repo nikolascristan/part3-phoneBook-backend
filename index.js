@@ -56,43 +56,11 @@ function areTheseObjectsEqual(first, second) {
   return allKeysExist && allKeyValuesMatch;
 }
 
-
-let persons = [
-    { 
-      "id": "1",
-      "name": "Arto Hellas", 
-      "number": "040-123456"
-    },
-    { 
-      "id": "2",
-      "name": "Ada Lovelace", 
-      "number": "39-44-5323523"
-    },
-    { 
-      "id": "3",
-      "name": "Dan Abramov", 
-      "number": "12-43-234345"
-    },
-    { 
-      "id": "4",
-      "name": "Mary Poppendieck", 
-      "number": "39-23-6423122"
-    }
-]
-
-//local
-/*app.get('/api/persons', (request, response) => {
-  response.send(persons)
-})*/
-
-
-//Working on fetch all
 app.get('/api/persons', (request, response) => {
   Person.find({}).then(persons => {
     response.json(persons)
   })
 })
-
 
 //Local info route
 /*app.get('/info', (request, response) => {
@@ -108,26 +76,19 @@ app.get('/api/persons', (request, response) => {
   response.send(pageInfo)
 })*/
 
-
-//Local find by id route
-/*app.get('/api/persons/:id', (request, response) => {
-  const id = request.params.id
-  const person = persons.find(persons => persons.id === id)
-  if (person) {
-    response.json(person)
-  } else {
-    response.status(404).end()
-  }
-})*/
-
-//Working on fetch by id from DB
-/*
 app.get('/api/persons/:id', (request, response) => {
-  person.findById(request.params.id).then(person => {
+  Person.findById(request.params.id).then(person => {
     response.json(person)
   })
-})*/
+})
 
+app.delete('/api/persons/:id', (request, reponse) => {
+  Person.findByIdAndDelete(request.params.id)
+    .then(result => {
+      reponse.status(204).end()
+  })
+    //.catch(error => next(error))
+})
 
 //Local delete route
 /*app.delete('/api/persons/:id', (request, response) => {
@@ -135,29 +96,6 @@ app.get('/api/persons/:id', (request, response) => {
   persons = persons.filter(persons => persons.id !== id)
 
   response.status(204).end()
-})*/
-
-//Local post route
-/*app.post('/api/persons', (request, response) => {
-  const newID = persons.length > 0 
-  ? Math.floor(Math.random() * 1000000)
-  :5
-  const person = request.body
-  person.id = String(newID)
-  if (!person.name || !person.number) {
-    return response.status(400).json({
-      error: 'Name or Number missing'
-    })
-  }
-  const nameExists = persons.some(element => areTheseObjectsEqual(element.name, person.name))
-  const numberExists = persons.some(element => areTheseObjectsEqual(element.number, person.number))
-    if(!nameExists && !numberExists) {
-      persons = persons.concat(person)
-      response.status(201).json(person)
-    } else { response.status(400).json({
-      error: 'Name or Number already exist'
-    })
-    }
 })*/
 
 app.post('/api/persons', (request, response) => {
