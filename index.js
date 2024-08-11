@@ -10,8 +10,9 @@ app.use(morgan('tiny'))
 app.use(cors())
 app.use(express.static('dist'))
 
+// eslint-disable-next-line no-unused-vars
 function areTheseObjectsEqual(first, second) {
-  "use strict";
+  'use strict'
 
   if (
     first === null ||
@@ -19,48 +20,49 @@ function areTheseObjectsEqual(first, second) {
     second === null ||
     second === undefined
   ) {
-    return first === second;
+    return first === second
   }
 
   if (first.constructor !== second.constructor) {
-    return false;
+    return false
   }
 
   if (first instanceof Function || first instanceof RegExp) {
-    return first === second;
+    return first === second
   }
 
   if (first === second || first.valueOf() === second.valueOf()) {
-    return true;
+    return true
   }
 
-  if (first instanceof Date) return false;
+  if (first instanceof Date) return false
 
   if (Array.isArray(first) && first.length !== second.length) {
-    return false;
+    return false
   }
 
   if (!(first instanceof Object) || !(second instanceof Object)) {
-    return false;
+    return false
   }
 
-  const firstKeys = Object.keys(first);
+  const firstKeys = Object.keys(first)
   const allKeysExist = Object.keys(second).every(
     (i) => firstKeys.indexOf(i) !== -1
-  );
+  )
 
   const allKeyValuesMatch = firstKeys.every((i) =>
     areTheseObjectsEqual(first[i], second[i])
-  );
+  )
 
-  return allKeysExist && allKeyValuesMatch;
+  return allKeysExist && allKeyValuesMatch
 }
 
 app.get('/api/persons', (request, response) => {
   Person.find({}).then(persons => {
     response.json(persons)
   })
-  .catch(error => next(error))
+    // eslint-disable-next-line no-undef
+    .catch(error => next(error))
 })
 
 //Local info route
@@ -85,14 +87,14 @@ app.get('/api/persons/:id', (request, response, next) => {
       response.status(404).end()
     }
   })
-  .catch(error => next(error))
+    .catch(error => next(error))
 })
 
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndDelete(request.params.id)
-    .then(result => {
+    .then(() => {
       response.status(204).end()
-  })
+    })
     .catch(error => next(error))
 })
 
@@ -107,19 +109,19 @@ app.delete('/api/persons/:id', (request, response, next) => {
 app.post('/api/persons', (request, response) => {
   const body = request.body
   if (!body.name || !body.number) {
-    return response.status(400).json({ error: 'name or number missing'})
+    return response.status(400).json({ error: 'name or number missing' })
   }
   const person = new Person({
     name: `${body.name}`,
     number: `${body.number}`
-})
-person.save().then(savedPerson => {
-  response.json(savedPerson)
-})
+  })
+  person.save().then(savedPerson => {
+    response.json(savedPerson)
+  })
 })
 
 const unknownEndpoint = (request, response) => {
-  response.status(404).send({error: 'unknown endpoint'})
+  response.status(404).send({ error: 'unknown endpoint' })
 }
 app.use(unknownEndpoint)
 
@@ -127,7 +129,7 @@ const errorHandler = (error, request, response, next) => {
   console.error(error.message)
 
   if (error.name === 'CastError') {
-    return response.status(400).send({ error: 'malformatted id'})
+    return response.status(400).send({ error: 'malformatted id' })
   }
 
   next(error)
