@@ -4,7 +4,7 @@ Welcome to the **part3-phoneBook-backend**! This repository is dedicated to buil
 
 ## link to deployed backend
 https://part3-phonebook-backend-bh2t.onrender.com
-
+(Possibility of initial startup delay, the server starts on request.)
 ## Learn More
 
 For more information and to deepen your understanding of the technologies used in this project, check out the following course:
